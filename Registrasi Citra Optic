@@ -5,17 +5,17 @@ from skimage.data import stereo_motorcycle, vortex
 from skimage.transform import warp
 from skimage.registration import optical_flow_tvl1, optical_flow_ilk
 
-# --- Load the sequence
+# --- Muat urutannya
 image0, image1, disp = stereo_motorcycle()
 
-# --- Convert the images to gray level: color is not supported.
+# --- Konversi gambar ke tingkat abu-abu: warna tidak didukung.
 image0 = rgb2gray(image0)
 image1 = rgb2gray(image1)
 
-# --- Compute the optical flow
+# --- Hitung aliran optik
 v, u = optical_flow_tvl1(image0, image1)
 
-# --- Use the estimated optical flow for registration
+# --- Gunakan perkiraan aliran optik untuk pendaftaran
 
 nr, nc = image0.shape
 
@@ -25,25 +25,25 @@ row_coords, col_coords = np.meshgrid(np.arange(nr), np.arange(nc),
 image1_warp = warp(image1, np.array([row_coords + v, col_coords + u]),
                    mode='edge')
 
-# build an RGB image with the unregistered sequence
+# membangun gambar RGB dengan urutan yang tidak terdaftar
 seq_im = np.zeros((nr, nc, 3))
 seq_im[..., 0] = image1
 seq_im[..., 1] = image0
 seq_im[..., 2] = image0
 
-# build an RGB image with the registered sequence
+# membangun gambar RGB dengan urutan terdaftar
 reg_im = np.zeros((nr, nc, 3))
 reg_im[..., 0] = image1_warp
 reg_im[..., 1] = image0
 reg_im[..., 2] = image0
 
-# build an RGB image with the registered sequence
+# membangun gambar RGB dengan urutan terdaftar
 target_im = np.zeros((nr, nc, 3))
 target_im[..., 0] = image0
 target_im[..., 1] = image0
 target_im[..., 2] = image0
 
-# --- Show the result
+# --- Tunjukkan hasilnya
 
 fig, (ax0, ax1, ax2) = plt.subplots(3, 1, figsize=(5, 10))
 
